@@ -1,0 +1,8 @@
+node_modules/
+dist/
+industrial-core/pieces/
+industrial-core/events/
+industrial-core/projects/
+industrial-core/workstations/
+.env
+.env.*

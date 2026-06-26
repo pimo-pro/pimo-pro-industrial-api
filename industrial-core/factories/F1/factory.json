@@ -1,0 +1,10 @@
+{
+  "factoryId": "F1",
+  "nome": "Fábrica Principal",
+  "localizacao": "Local",
+  "funcionarios": ["operador-local"],
+  "maquinas": ["CNC-1", "DRILL-1", "ORLA-1"],
+  "sessoesAtivas": 0,
+  "produtividadeAgregada": 0,
+  "updatedAt": "2026-06-26T00:00:00.000Z"
+}
