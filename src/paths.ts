@@ -1,18 +1,25 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const API_ROOT = path.resolve(__dirname, '..');
+import {
+  INDUSTRIAL_CORE_ROOT,
+  PROJETOS_ROOT,
+  PIMO_PROJECTS_ROOT,
+} from './config/storagePaths.js';
 
-export const INDUSTRIAL_CORE_ROOT = path.join(API_ROOT, 'industrial-core');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export { INDUSTRIAL_CORE_ROOT };
+
 export const PIECES_ROOT = path.join(INDUSTRIAL_CORE_ROOT, 'pieces');
 export const PROJECTS_ROOT = path.join(INDUSTRIAL_CORE_ROOT, 'projects');
 export const FACTORIES_ROOT = path.join(INDUSTRIAL_CORE_ROOT, 'factories');
 export const WORKSTATIONS_ROOT = path.join(INDUSTRIAL_CORE_ROOT, 'workstations');
 export const EVENTS_LOG_PATH = path.join(INDUSTRIAL_CORE_ROOT, 'events', 'event-log.ndjson');
 
-export const LOCAL_PROJETOS_ROOT = path.resolve(API_ROOT, '..', 'pimo-pro-industrial', 'data', 'PROJETOS');
-export const LOCAL_PIMO_PROJECTS = path.resolve(API_ROOT, '..', 'pimo-criativo', 'data', 'projects');
+/** Ponte para lookup local (mesmos paths que SGPI). */
+export const LOCAL_PROJETOS_ROOT = PROJETOS_ROOT;
+export const LOCAL_PIMO_PROJECTS = PIMO_PROJECTS_ROOT;
 
 export function pieceCentralPath(qr: string): string {
   const safe = qr.toLowerCase().replace(/[^a-z0-9-]/g, '');

@@ -19,6 +19,13 @@ const TOKEN_PROFILE: Record<string, IndustrialProfile> = {
 };
 
 export function authStub(req: Request, res: Response, next: NextFunction): void {
+  // MES / SGPI — público (também se authStub estiver montado em /api por engano).
+  const path = req.path.startsWith('/api') ? req.path : `/api${req.path}`;
+  if (path.startsWith('/api/industrial')) {
+    next();
+    return;
+  }
+
   const header = req.headers.authorization ?? '';
   const token = header.startsWith('Bearer ') ? header.slice(7) : header;
   const profile = TOKEN_PROFILE[token];

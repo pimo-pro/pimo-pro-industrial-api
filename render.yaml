@@ -1,14 +1,20 @@
-services:
-  - type: web
-    name: pimo-pro-industrial-api
-    runtime: node
-    plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npm start
-    healthCheckPath: /health
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: CORS_ORIGIN
-        value: https://industrial.pimo.pro
-      # NÃO definir PORT — o Render injecta automaticamente process.env.PORT
+services:
+  - type: web
+    name: pimo-pro-industrial-api
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    disk:
+      name: pimo-industrial-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        value: https://industrial.pimo.pro,https://pimo.pro,https://www.pimo.pro
+      - key: DATA_ROOT
+        value: /var/data/pimo-industrial
+      # NÃO definir PORT — o Render injecta automaticamente process.env.PORT

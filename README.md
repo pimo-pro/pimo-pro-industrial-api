@@ -20,7 +20,17 @@ Token: `Bearer pimo-industrial-dev-token`
 - **Health:** `GET /health`
 - **Não definir `PORT` nas env vars** — o Render injecta `process.env.PORT` automaticamente; fixar `5180` impede o proxy público de alcançar o Express.
 
-## Rotas
+## Rotas MES (sem auth — SGPI + listagem)
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/api/industrial/projects` | Lista projectos industriais |
+| GET | `/api/industrial/projects/:user/:project` | Dashboard do projecto |
+| POST | `/api/industrial/sgpi/prepare` | Preparar registo SGPI |
+| POST | `/api/industrial/sgpi/register` | Registar projecto + piece.json |
+| GET | `/api/industrial/qr/:qr` | Lookup QR |
+
+## Rotas central (auth Bearer)
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
@@ -31,6 +41,19 @@ Token: `Bearer pimo-industrial-dev-token`
 | POST | `/api/session/start` | Iniciar sessão |
 | POST | `/api/session/end` | Terminar sessão |
 | GET | `/api/lookup/:qr` | QR → rota hierárquica |
+
+## Storage persistente
+
+Variáveis de ambiente (Render disk recomendado):
+
+| Variável | Default (Render) |
+|----------|------------------|
+| `DATA_ROOT` | `/var/data/pimo-industrial` |
+| `PROJETOS_ROOT` | `$DATA_ROOT/PROJETOS` |
+| `PIMO_PROJECTS_ROOT` | `$DATA_ROOT/pimo-projects` |
+| `INDUSTRIAL_CORE_ROOT` | `$DATA_ROOT/industrial-core` |
+| `PIMO_PROJECTS_API_URL` | `https://pimo.pro/api/projects/index.php` |
+| `CORS_ORIGIN` | `https://industrial.pimo.pro,https://pimo.pro,https://www.pimo.pro` |
 
 ## Industrial Core
 

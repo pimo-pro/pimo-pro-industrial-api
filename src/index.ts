@@ -5,8 +5,10 @@ import express from 'express';
 import { WebSocketServer } from 'ws';
 
 import { authStub } from './auth.js';
+import { ensureStorageDirs } from './config/storagePaths.js';
 import { ensureDefaultFactory } from './core/industrialCore.js';
 import { ensureDefaultWorkstations } from './core/workstations.js';
+import { createIndustrialRouter } from './industrial/mesRouter.js';
 import { eventsRouter } from './routes/events.js';
 import { factoryRouter } from './routes/factory.js';
 import { hardwareRouter } from './routes/hardware.js';
@@ -32,19 +34,23 @@ app.use(
 app.use(express.json({ limit: '2mb' }));
 
 app.get('/health', (_req, res) => {
-  res.json({ ok: true, service: 'pimo-pro-industrial-api', phase: 5, realtime: true });
+  res.json({ ok: true, service: 'pimo-pro-industrial-api', phase: 5, realtime: true, mes: true });
 });
 
-app.use('/api', authStub);
-app.use('/api/piece', pieceRouter);
-app.use('/api/project', projectRouter);
-app.use('/api/session', sessionRouter);
-app.use('/api/lookup', lookupRouter);
-app.use('/api/workstation', workstationRouter);
-app.use('/api/factory', factoryRouter);
-app.use('/api/hardware', hardwareRouter);
-app.use('/api/events', eventsRouter);
+/** MES / SGPI — totalmente público (sem auth). */
+app.use('/api/industrial', createIndustrialRouter());
 
+/** Rotas central — auth por router (nunca app.use('/api', authStub) global). */
+app.use('/api/piece', authStub, pieceRouter);
+app.use('/api/project', authStub, projectRouter);
+app.use('/api/session', authStub, sessionRouter);
+app.use('/api/lookup', authStub, lookupRouter);
+app.use('/api/workstation', authStub, workstationRouter);
+app.use('/api/factory', authStub, factoryRouter);
+app.use('/api/hardware', authStub, hardwareRouter);
+app.use('/api/events', authStub, eventsRouter);
+
+ensureStorageDirs();
 ensureDefaultFactory();
 ensureDefaultWorkstations();
 
@@ -55,6 +61,7 @@ attachWebSocketServer(wss);
 server.listen(PORT, HOST, () => {
   console.log(`PIMO Industrial API (Fase 5) listening on ${HOST}:${PORT}`);
   console.log(`WebSocket: ws://${HOST}:${PORT}/ws`);
+  console.log('MES público: GET /api/industrial/projects (sem token)');
   if (process.env.RENDER && process.env.PORT === '5180') {
     console.warn(
       'AVISO: PORT=5180 no Render — remover PORT das env vars; o Render injecta o porto automaticamente.'

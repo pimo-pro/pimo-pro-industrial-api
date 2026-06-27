@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "build": "tsc",
+    "build": "node scripts/vendor-industrial-lib.mjs && tsc",
+    "deploy:render": "node scripts/deploy-render.mjs",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
