@@ -6,15 +6,12 @@ services:
     buildCommand: npm install && npm run build
     startCommand: npm start
     healthCheckPath: /health
-    disk:
-      name: pimo-industrial-data
-      mountPath: /var/data
-      sizeGB: 1
     envVars:
       - key: NODE_ENV
         value: production
       - key: CORS_ORIGIN
         value: https://industrial.pimo.pro,https://pimo.pro,https://www.pimo.pro
+      # Storage local efémero no free tier; migrar para disco pago com DATA_ROOT=/var/data/pimo-industrial
       - key: DATA_ROOT
-        value: /var/data/pimo-industrial
+        value: /opt/render/project/src/data
       # NÃO definir PORT — o Render injecta automaticamente process.env.PORT
